@@ -1,9 +1,8 @@
 from rest_framework import viewsets
-from rest_framework.mixins import (CreateModelMixin,
-                                   ListModelMixin,
-                                   DestroyModelMixin)
+from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
+                                   ListModelMixin)
 
-from reviews.models import Category, Genre, Title, Review, Comment
+from reviews.models import Category, Comment, Genre, Review, Title
 
 
 class CreateListDestroyModelViewSet(CreateModelMixin,
