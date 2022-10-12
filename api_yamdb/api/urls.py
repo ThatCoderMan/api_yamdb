@@ -10,10 +10,10 @@ router.register('genres', GenreViewSet)
 router.register('titles', TitleViewSet)
 
 review_router = SimpleRouter()
-review_router.register('reviews', ReviewViewSet)
+review_router.register('reviews', ReviewViewSet, basename='reviews')
 
 comment_router = SimpleRouter()
-comment_router.register('comments', CommentViewSet)
+comment_router.register('comments', CommentViewSet, basename='comments')
 
 urlpatterns = [
     path('', include(router.urls)),
