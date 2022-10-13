@@ -36,10 +36,7 @@ class Title(models.Model):
                     MaxValueValidator(get_current_year())]
     )
     description = models.TextField(blank=True, null=True)
-    genre = models.ForeignKey(
-        Genre, on_delete=models.SET_NULL,
-        related_name='title', null=True
-    )
+    genre = models.ManyToManyField(Genre, related_name='title')
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL,
         related_name='title', null=True
