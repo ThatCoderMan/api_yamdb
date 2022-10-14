@@ -24,37 +24,20 @@ class CategoryViewSet(CreateListDestroyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = (SearchFilter, )
-    search_fields = ('search', )
-
-    def destroy(self, request, *args, **kwargs):
-        slug = self.kwargs.get('pk')
-        instance = Category.objects.filter(slug=slug)
-        if instance:
-            instance.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    search_fields = ('name', )
 
 
 class GenreViewSet(CreateListDestroyModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     filter_backends = (SearchFilter, )
-    search_fields = ('search', )
-
-    def destroy(self, request, *args, **kwargs):
-        slug = self.kwargs.get('pk')
-        instance = Genre.objects.filter(slug=slug)
-        if instance:
-            instance.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    search_fields = ('name', )
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.annotate(rating=Avg('review__score'))
     serializer_class = TitleSerializer
     filter_backends = (DjangoFilterBackend, )
-    # filterset_fields = ('category', 'name', 'year', 'genre')
     filterset_class = TitleFilter
     http_method_names = ['get', 'post', 'patch', 'delete']
 
