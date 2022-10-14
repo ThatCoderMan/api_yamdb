@@ -1,10 +1,16 @@
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
                                    ListModelMixin)
 
 from reviews.models import Category, Comment, Genre, Review, Title
-from .serializers import CommentSerializer, ReviewSerializer
+
+from .filters import TitleFilter
+from .serializers import (CategorySerializer, CommentSerializer,
+                          GenreSerializer, ReviewSerializer, TitleSerializer)
 
 
 class CreateListDestroyModelViewSet(CreateModelMixin,
@@ -16,19 +22,28 @@ class CreateListDestroyModelViewSet(CreateModelMixin,
 
 class CategoryViewSet(CreateListDestroyModelViewSet):
     queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    filter_backends = (SearchFilter, )
+    search_fields = ('name', )
 
 
 class GenreViewSet(CreateListDestroyModelViewSet):
     queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    filter_backends = (SearchFilter, )
+    search_fields = ('name', )
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
-    http_method_names = ['get', 'post', 'patch', 'delete']  # we don't use put
+    queryset = Title.objects.annotate(rating=Avg('review__score'))
+    serializer_class = TitleSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = TitleFilter
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
-    http_method_names = ['get', 'post', 'patch', 'delete']  # we don't use put
+    http_method_names = ['get', 'post', 'patch', 'delete']
     serializer_class = ReviewSerializer
     # permission_classes = (IsTrustedOrReadOnly,)
     # здесь будет пермишн от Игоря
@@ -46,7 +61,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    http_method_names = ['get', 'post', 'patch', 'delete']  # we don't use put
+    http_method_names = ['get', 'post', 'patch', 'delete']
     serializer_class = CommentSerializer
     # permission_classes = (IsTrustedOrReadOnly,)
     # здесь будет пермишн от Игоря
