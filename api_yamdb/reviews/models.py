@@ -1,16 +1,61 @@
 import datetime
 
-from django.contrib.auth import get_user_model
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.models import AbstractUser
+from django.core.validators import (MaxValueValidator, MinValueValidator,
+                                    RegexValidator)
 from django.db import models
+
+ROLES = (
+    ('user', 'пользователь'),
+    ('moderator', 'модератор'),
+    ('admin', 'администратор'),
+)
 
 
 def get_current_year():
     return datetime.date.today().year
 
 
-User = get_user_model()
-# Пока мы не создали кастомного юзера используем дефолтного
+class User(AbstractUser):
+    username = models.CharField(
+        verbose_name='user name',
+        max_length=150,
+        validators=(RegexValidator(r'[\w.@+-]+\z'),),
+        unique=True,
+    )
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=254,
+        unique=True,
+    )
+    first_name = models.CharField(
+        verbose_name='first name',
+        max_length=150,
+        blank=True,
+    )
+    last_name = models.CharField(
+        verbose_name='last name',
+        max_length=150,
+        blank=True,
+    )
+    role = models.CharField(
+        max_length=20,
+        choices=ROLES,
+        blank=True,
+        default='user',
+    )
+    bio = models.TextField(
+        verbose_name='biography description',
+        blank=True,
+    )
+    confirmation_code = models.CharField(
+        verbose_name='confirnmation_code',
+        max_length=20,
+        blank=True,
+    )
+
+    def __str__(self):
+        return self.username
 
 
 class Category(models.Model):
