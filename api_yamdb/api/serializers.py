@@ -1,9 +1,7 @@
+from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 
-from reviews.models import Category, Comment, Genre, Review, Title
-from rest_framework import serializers
-
-from reviews.models import User
+from reviews.models import Category, Comment, Genre, Review, Title, User
 
 
 class TokenSerializer(serializers.ModelSerializer):

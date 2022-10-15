@@ -1,29 +1,24 @@
-from django.db.models import Avg
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
-from rest_framework.filters import SearchFilter
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin)
-
-from reviews.models import Category, Comment, Genre, Review, Title
-
-from .filters import TitleFilter
-from .serializers import (CategorySerializer, CommentSerializer,
-                          GenreSerializer, ReviewSerializer, TitleSerializer,
-                          SignUpSerialiser, TokenSerializer)
-
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
-from rest_framework import status
+from django.db.models import Avg
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, viewsets
+from rest_framework.filters import SearchFilter
+from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
+                                   ListModelMixin)
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from django.shortcuts import get_object_or_404
+from reviews.models import Category, Comment, Genre, Review, Title, User
 
-from reviews.models import User
+from .filters import TitleFilter
+from .serializers import (CategorySerializer, CommentSerializer,
+                          GenreSerializer, ReviewSerializer, SignUpSerialiser,
+                          TitleSerializer, TokenSerializer)
 
 
 def send_email_confirmation(user, confirmation_code):
