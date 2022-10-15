@@ -5,6 +5,8 @@ from django.core.validators import (MaxValueValidator, MinValueValidator,
                                     RegexValidator)
 from django.db import models
 
+from .validators import validate_me_as_username
+
 ROLES = (
     ('user', 'пользователь'),
     ('moderator', 'модератор'),
@@ -20,7 +22,10 @@ class User(AbstractUser):
     username = models.CharField(
         verbose_name='user name',
         max_length=150,
-        validators=(RegexValidator(r'[\w.@+-]+\z'),),
+        validators=(
+            RegexValidator(r'[\w.@+-]+'),
+            validate_me_as_username,
+        ),
         unique=True,
     )
     email = models.EmailField(

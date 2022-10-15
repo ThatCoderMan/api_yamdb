@@ -121,5 +121,10 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-AUTH_USER_MODEL = 'reviews.User'
+#  filebased.EmailBackend
 
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+EMAIL_HOST_USER = 'admin@yamdb.com'
+
+AUTH_USER_MODEL = 'reviews.User'
