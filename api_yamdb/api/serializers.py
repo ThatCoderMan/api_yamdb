@@ -1,7 +1,32 @@
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 
-from reviews.models import Category, Comment, Genre, Review, Title
+from reviews.models import Category, Comment, Genre, Review, Title, User
+
+
+class TokenSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=True)
+    confirmation_code = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'confirmation_code')
+
+
+class SignUpSerialiser(serializers.ModelSerializer):
+    # todo: add username/email field
+
+    class Meta:
+        model = User
+        fields = ('username', 'email',)
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name',
+                  'bio', 'role')
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -18,7 +43,18 @@ class GenreSerializer(serializers.ModelSerializer):
         lookup_field = 'slug'
 
 
-class TitleSerializer(serializers.ModelSerializer):
+class TitleGetSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+    genre = GenreSerializer(many=True)
+    rating = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        fields = ('id', 'name', 'year',
+                  'description', 'rating', 'genre', 'category')
+        model = Title
+
+
+class TitleEditSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(
         queryset=Category.objects.all(),
         slug_field='slug'
@@ -28,11 +64,10 @@ class TitleSerializer(serializers.ModelSerializer):
         slug_field='slug',
         many=True
     )
-    rating = serializers.IntegerField(read_only=True)
 
     class Meta:
         fields = ('id', 'name', 'year',
-                  'description', 'rating', 'genre', 'category')
+                  'description', 'genre', 'category')
         model = Title
 
 
