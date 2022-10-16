@@ -20,6 +20,7 @@ class TitleAdmin(admin.ModelAdmin):
             genre = Genre.objects.get(pk=genre.genre_id)
             genre_list += genre.name + ' '
         return genre_list
+    view_genre_list.short_description = 'Genres'
 
 
 @admin.register(Category)
@@ -58,3 +59,9 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'role')
+    list_filter = ('role',)
+    search_fields = ('username__startswith',
+                     'email__startswith',
+                     'first_name__startswith',
+                     'last_name__startswith',
+                     'role__startswith')
