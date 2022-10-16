@@ -15,9 +15,7 @@ class TokenSerializer(serializers.ModelSerializer):
         fields = ('username', 'confirmation_code')
 
 
-class SignUpSerialiser(serializers.ModelSerializer):
-    # todo: add username/email field
-
+class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email',)
@@ -26,8 +24,8 @@ class SignUpSerialiser(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name',
-                  'bio', 'role')
+        fields = ('username', 'email', 'first_name',
+                  'last_name', 'bio', 'role')
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -50,8 +48,8 @@ class TitleGetSerializer(serializers.ModelSerializer):
     rating = serializers.IntegerField(read_only=True)
 
     class Meta:
-        fields = ('id', 'name', 'year',
-                  'description', 'rating', 'genre', 'category')
+        fields = ('id', 'name', 'year', 'description',
+                  'rating', 'genre', 'category')
         model = Title
 
 
