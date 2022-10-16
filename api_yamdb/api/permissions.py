@@ -34,5 +34,4 @@ class IsAdminOrModeratorOrMe(metaclass=permissions.BasePermissionMetaclass):
         return (request.method in permissions.SAFE_METHODS
                 or request.user.is_authenticated
                 and (request.user.role in ADMIN_MODERATOR_ROLES
-                     or request.user == obj.author)
-        )
+                     or request.user == obj.author))
