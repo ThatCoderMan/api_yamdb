@@ -140,12 +140,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     # todo: редактирования только своих постов или быть администратором
 
-    # todo: ошибка при POST запросе на
-    #  http://127.0.0.1:8000/api/v1/titles/5/reviews/6/comments/
-
     http_method_names = ['get', 'post', 'patch', 'delete']
     serializer_class = CommentSerializer
-    lookup_field = 'title_id'
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')
@@ -154,6 +150,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(
             review_id=get_object_or_404(
-                Title, pk=self.kwargs['title_id'], ),
+                Review, pk=self.kwargs['review_id'], ),
             author=self.request.user,
         )

@@ -116,9 +116,19 @@ class Review(models.Model):
         db_index=True,
     )
 
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title_id', 'author'],
+                name='unique_title_author'
+            )
+        ]
+
     def __str__(self):
         return (f'Обзор пользователя {self.author.username} '
                 f'на произведение "{self.title_id}"')
+
 
 
 class Comment(models.Model):
