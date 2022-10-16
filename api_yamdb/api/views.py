@@ -5,6 +5,7 @@ from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
                                    ListModelMixin)
@@ -84,12 +85,23 @@ class UserViewSet(viewsets.ModelViewSet):
     search_fields = ('username',)
     lookup_field = 'username'
 
-    # todo: users/me
-    #  Прописать get_queryset и get_permissions для работы со своим аккаунтом
+    @action(methods=['get', 'patch'], detail=False,
+            permission_classes=(IsAuthenticated,), url_path='me')
+    def get_or_patch_me(self, request):
+        user = User.objects.get(username=request.user.username)
+        if request.method == 'PATCH':
+            serializer = UserSerializer(user, data=request.data, partial=True)
+            serializer.is_valid()
+            if request.user.role == 'user':
+                serializer.validated_data['role'] = 'user'
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
 
 
 class CategoryViewSet(CreateListDestroyModelViewSet):
-    permission_classes = (isAdminOrReadOnly, )
+    permission_classes = (isAdminOrReadOnly,)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = (SearchFilter,)
@@ -98,7 +110,7 @@ class CategoryViewSet(CreateListDestroyModelViewSet):
 
 
 class GenreViewSet(CreateListDestroyModelViewSet):
-    permission_classes = (isAdminOrReadOnly, )
+    permission_classes = (isAdminOrReadOnly,)
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     filter_backends = (SearchFilter,)
@@ -110,7 +122,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.annotate(rating=Avg('review__score'))
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
-    permission_classes = (isAdminOrReadOnly, )
+    permission_classes = (isAdminOrReadOnly,)
     http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_serializer_class(self):
