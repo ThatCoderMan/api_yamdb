@@ -44,6 +44,7 @@ class Command(BaseCommand):
             User.objects.get_or_create(
                 pk=value['id'],
                 username=value['username'],
+                email=value['email'],
                 role=value['role'],
                 bio=value['bio'],
                 first_name=value['first_name'],
@@ -62,17 +63,20 @@ class Command(BaseCommand):
                 slug=value['slug']
             )
         for value in CSV_TABLES['Title']:
+            category = Category.objects.get(pk=value['category'])
             Title.objects.get_or_create(
                 pk=value['id'],
                 name=value['name'],
                 year=value['year'],
-                category=value['category']
+                category=category
             )
         for value in CSV_TABLES['GenreTitle']:
+            title = Title.objects.get(pk=value['title_id'])
+            genre = Genre.objects.get(pk=value['genre_id'])
             Title.genre.through.objects.get_or_create(
                 pk=value['id'],
-                title=value['title_id'],
-                genre=value['genre_id']
+                title=title,
+                genre=genre
             )
         for value in CSV_TABLES['Review']:
             title = Title.objects.get(pk=value['title_id'])
