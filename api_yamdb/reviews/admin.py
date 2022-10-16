@@ -37,10 +37,10 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('title_id', 'score', 'author', 'text', 'pub_date')
+    list_display = ('title', 'score', 'author', 'text', 'pub_date')
     ordering = ('-pub_date',)
-    list_filter = ('title_id', 'author', )
-    search_fields = ('title_id__name__startswith',
+    list_filter = ('title', 'author', )
+    search_fields = ('title__name__startswith',
                      'score',
                      'author__username__startswith',
                      'text')
@@ -48,10 +48,10 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('review_id', 'author', 'text', 'pub_date')
+    list_display = ('review', 'author', 'text', 'pub_date')
     ordering = ('-pub_date',)
-    list_filter = ('author', 'review_id__title_id')
-    search_fields = ('review_id__author__username__startswith',
+    list_filter = ('author', 'review__title')
+    search_fields = ('review__author__username__startswith',
                      'author__username__startswith',
                      'text')
 

@@ -59,6 +59,13 @@ class User(AbstractUser):
         blank=True,
     )
 
+    def save(self, *args, **kwargs):
+        if self.role == 'admin' or self.is_superuser is True:
+            self.is_staff = True
+        elif self.role in ('user', 'moderator') or self.is_superuser is False:
+            self.is_staff = False
+        super(User, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.username
 
