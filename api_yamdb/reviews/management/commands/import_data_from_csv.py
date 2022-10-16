@@ -25,8 +25,8 @@ def delete_everything():
 
 
 def print_attention():
-    print('Внимание! Будут уничтожены данные обо всех  '
-          'категориях, жанрах, произведениях, обзорах и комментариях'
+    print('Внимание! Будут уничтожены данные обо всех '
+          'категориях, жанрах, произведениях, обзорах и комментариях '
           'и заменены данными из CSV-файлов. Хотите продолжить ? [Y / N]: ')
     answer = input()
     if answer.upper() != 'Y':
@@ -41,47 +41,57 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for value in CSV_TABLES['User']:
-            try:
-                User.objects.get_or_create(pk=value['id'],
-                                       username=value['username'],
-                                       email=value['email'],
-                                       role=value['role'],
-                                       bio=value['bio'],
-                                       first_name=value['first_name'],
-                                       last_name=value['last_name'])
-            except:
-                pass
+            User.objects.get_or_create(
+                pk=value['id'],
+                username=value['username'],
+                role=value['role'],
+                bio=value['bio'],
+                first_name=value['first_name'],
+                last_name=value['last_name']
+            )
         for value in CSV_TABLES['Category']:
-            Category.objects.get_or_create(pk=value['id'],
-                                           name=value['name'],
-                                           slug=value['slug'])
+            Category.objects.get_or_create(
+                pk=value['id'],
+                name=value['name'],
+                slug=value['slug']
+            )
         for value in CSV_TABLES['Genre']:
-            Genre.objects.get_or_create(pk=value['id'],
-                                        name=value['name'],
-                                        slug=value['slug'])
+            Genre.objects.get_or_create(
+                pk=value['id'],
+                name=value['name'],
+                slug=value['slug']
+            )
         for value in CSV_TABLES['Title']:
-            title = Title.objects.get_or_create(pk=value['id'],
-                                                name=value['name'],
-                                                year=value['year'],
-                                                category_id=value['category'])
+            title = Title.objects.get_or_create(
+                pk=value['id'],
+                name=value['name'],
+                year=value['year'],
+                category_id=value['category']
+            )
         for value in CSV_TABLES['GenreTitle']:
-            Title.genre.through.objects.get_or_create(pk=value['id'],
-                                                      title_id=value['title_id'],
-                                                      genre_id=value['genre_id'])
+            Title.genre.through.objects.get_or_create(
+                pk=value['id'],
+                title_id=value['title_id'],
+                genre_id=value['genre_id']
+            )
         for value in CSV_TABLES['Review']:
             title = Title.objects.get(pk=value['title_id'])
             author = User.objects.get(pk=value['author'])
-            Review.objects.get_or_create(pk=value['id'],
-                                         title_id=title,
-                                         text=value['text'],
-                                         author=author,
-                                         score=value['score'],
-                                         pub_date=value['pub_date'],)
+            Review.objects.get_or_create(
+                pk=value['id'],
+                title_id=title,
+                text=value['text'],
+                author=author,
+                score=value['score'],
+                pub_date=value['pub_date'],
+            )
         for value in CSV_TABLES['Comment']:
             review = Review.objects.get(pk=value['review_id'])
             author = User.objects.get(pk=value['author'])
-            Comment.objects.get_or_create(pk=value['id'],
-                                          review_id=review,
-                                          text=value['text'],
-                                          author=author,
-                                          pub_date=value['pub_date'],)
+            Comment.objects.get_or_create(
+                pk=value['id'],
+                review_id=review,
+                text=value['text'],
+                author=author,
+                pub_date=value['pub_date'],
+            )
