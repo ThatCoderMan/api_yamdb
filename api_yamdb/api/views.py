@@ -139,13 +139,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     # todo: редактирования только своих постов или быть администратором
-
-    # todo: ошибка при POST запросе на
     #  http://127.0.0.1:8000/api/v1/titles/5/reviews/6/comments/
 
     http_method_names = ['get', 'post', 'patch', 'delete']
     serializer_class = CommentSerializer
-    lookup_field = 'review_id'
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')

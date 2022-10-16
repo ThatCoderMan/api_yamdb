@@ -20,7 +20,7 @@ def delete_everything():
     Category.objects.all().delete()
     Genre.objects.all().delete()
     Title.objects.all().delete()
-    Title.genre.through.all().delete()
+    Title.genre.through.objects.all().delete()
     Comment.objects.all().delete()
 
 
@@ -41,12 +41,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for value in CSV_TABLES['User']:
-            User.objects.get_or_create(pk=value['id'],
+            try:
+                User.objects.get_or_create(pk=value['id'],
                                        username=value['username'],
+                                       email=value['email'],
                                        role=value['role'],
                                        bio=value['bio'],
                                        first_name=value['first_name'],
                                        last_name=value['last_name'])
+            except:
+                pass
         for value in CSV_TABLES['Category']:
             Category.objects.get_or_create(pk=value['id'],
                                            name=value['name'],
