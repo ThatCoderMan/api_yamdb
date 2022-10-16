@@ -145,7 +145,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     http_method_names = ['get', 'post', 'patch', 'delete']
     serializer_class = CommentSerializer
-    lookup_field = 'title_id'
+    lookup_field = 'review_id'
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')
@@ -154,6 +154,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(
             review_id=get_object_or_404(
-                Title, pk=self.kwargs['title_id'], ),
+                Review, pk=self.kwargs['review_id'], ),
             author=self.request.user,
         )

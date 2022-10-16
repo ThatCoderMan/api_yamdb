@@ -115,6 +115,14 @@ class Review(models.Model):
         db_index=True,
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title_id', 'author'],
+                name='unique_title_author'
+            )
+        ]
+
 
 class Comment(models.Model):
     review_id = models.ForeignKey(
