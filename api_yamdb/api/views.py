@@ -139,7 +139,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     # todo: редактирования только своих постов или быть администратором
-    #  http://127.0.0.1:8000/api/v1/titles/5/reviews/6/comments/
 
     http_method_names = ['get', 'post', 'patch', 'delete']
     serializer_class = CommentSerializer
