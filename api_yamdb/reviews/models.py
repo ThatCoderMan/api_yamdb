@@ -98,7 +98,7 @@ class Title(models.Model):
 
 
 class Review(models.Model):
-    title_id = models.ForeignKey(
+    title = models.ForeignKey(
         Title, on_delete=models.CASCADE,
         related_name='review'
     )
@@ -116,23 +116,21 @@ class Review(models.Model):
         db_index=True,
     )
 
-
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['title_id', 'author'],
+                fields=['title', 'author'],
                 name='unique_title_author'
             )
         ]
 
     def __str__(self):
         return (f'Обзор пользователя {self.author.username} '
-                f'на произведение "{self.title_id}"')
-
+                f'на произведение "{self.title}"')
 
 
 class Comment(models.Model):
-    review_id = models.ForeignKey(
+    review = models.ForeignKey(
         Review, on_delete=models.CASCADE,
         related_name='comment'
     )
@@ -148,5 +146,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return ('Комментарий к обзору пользователя '
-                f'{self.review_id.author.username} на '
-                f'"{self.review_id.title_id}"')
+                f'{self.review.author.username} на '
+                f'"{self.review.title}"')

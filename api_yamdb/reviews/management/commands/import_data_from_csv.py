@@ -62,24 +62,24 @@ class Command(BaseCommand):
                 slug=value['slug']
             )
         for value in CSV_TABLES['Title']:
-            title = Title.objects.get_or_create(
+            Title.objects.get_or_create(
                 pk=value['id'],
                 name=value['name'],
                 year=value['year'],
-                category_id=value['category']
+                category=value['category']
             )
         for value in CSV_TABLES['GenreTitle']:
             Title.genre.through.objects.get_or_create(
                 pk=value['id'],
-                title_id=value['title_id'],
-                genre_id=value['genre_id']
+                title=value['title_id'],
+                genre=value['genre_id']
             )
         for value in CSV_TABLES['Review']:
             title = Title.objects.get(pk=value['title_id'])
             author = User.objects.get(pk=value['author'])
             Review.objects.get_or_create(
                 pk=value['id'],
-                title_id=title,
+                title=title,
                 text=value['text'],
                 author=author,
                 score=value['score'],
@@ -90,7 +90,7 @@ class Command(BaseCommand):
             author = User.objects.get(pk=value['author'])
             Comment.objects.get_or_create(
                 pk=value['id'],
-                review_id=review,
+                review=review,
                 text=value['text'],
                 author=author,
                 pub_date=value['pub_date'],
