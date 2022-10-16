@@ -22,7 +22,6 @@ class User(AbstractUser):
     username = models.CharField(
         verbose_name='user name',
         max_length=150,
-
         validators=(
             RegexValidator(r'[\w.@+-]+'),
             validate_me_as_username,
@@ -55,7 +54,7 @@ class User(AbstractUser):
         blank=True,
     )
     confirmation_code = models.CharField(
-        verbose_name='confirnmation_code',
+        verbose_name='confirmation_code',
         max_length=50,
         blank=True,
     )
