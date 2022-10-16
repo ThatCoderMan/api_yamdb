@@ -22,6 +22,7 @@ class User(AbstractUser):
     username = models.CharField(
         verbose_name='user name',
         max_length=150,
+
         validators=(
             RegexValidator(r'[\w.@+-]+'),
             validate_me_as_username,
@@ -115,6 +116,10 @@ class Review(models.Model):
         db_index=True,
     )
 
+    def __str__(self):
+        return (f'Обзор пользователя {self.author.username} '
+                f'на произведение "{self.title_id}"')
+
 
 class Comment(models.Model):
     review_id = models.ForeignKey(
@@ -130,3 +135,8 @@ class Comment(models.Model):
         auto_now_add=True,
         db_index=True,
     )
+
+    def __str__(self):
+        return ('Комментарий к обзору пользователя '
+                f'{self.review_id.author.username} на '
+                f'"{self.review_id.title_id}"')

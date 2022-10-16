@@ -123,6 +123,7 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+
 #  filebased.EmailBackend
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
