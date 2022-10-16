@@ -8,20 +8,19 @@ from rest_framework import status, viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
                                    ListModelMixin)
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
 
 from reviews.models import Category, Comment, Genre, Review, Title, User
 
 from .filters import TitleFilter
+from .permissions import isAdmin, isAdminOrMe, isAdminOrReadOnly
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ReviewSerializer, SignUpSerialiser,
-                          TitleGetSerializer, TokenSerializer,
-                          TitleEditSerializer, UserSerializer)
-from .permissions import isAdminOrReadOnly, isAdminOrMe, isAdmin
+                          TitleEditSerializer, TitleGetSerializer,
+                          TokenSerializer, UserSerializer)
 
 
 def send_email_confirmation(user, confirmation_code):
