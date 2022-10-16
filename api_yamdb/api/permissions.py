@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-ADMIN_ROLES = ('admin', 'moderator')
+ADMIN_MODERATOR_ROLES = ('admin', 'moderator')
 
 
 class IsAdminOrReadOnly(metaclass=permissions.BasePermissionMetaclass):
@@ -37,6 +37,6 @@ class IsAdminOrModeratorOrMe(metaclass=permissions.BasePermissionMetaclass):
         return (
                 request.method in permissions.SAFE_METHODS
                 or request.user.is_authenticated
-                and (request.user.role in ('admin', 'moderator')
+                and (request.user.role in ADMIN_MODERATOR_ROLES
                      or request.user == obj.author)
         )
