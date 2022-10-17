@@ -18,7 +18,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from reviews.models import Category, Comment, Genre, Review, Title, User
 
 from .filters import TitleFilter
-from .permissions import IsAdmin, IsAdminOrModeratorOrMe, IsAdminOrReadOnly
+from .permissions import (IsAdmin, IsAdminOrReadOnly, IsAuthorOrReadOnly,
+                          IsModeratorOrReadOnly)
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ReviewSerializer, SignUpSerializer,
                           TitleEditSerializer, TitleGetSerializer,
@@ -133,7 +134,8 @@ class TitleViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
-    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrModeratorOrMe,)
+    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly
+                          | IsModeratorOrReadOnly | IsAuthorOrReadOnly)
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
@@ -142,7 +144,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(
             title=get_object_or_404(
-                Title, pk=self.kwargs['title_id'],),
+                Title, pk=self.kwargs['title_id'], ),
             author=self.request.user,
         )
 
@@ -156,7 +158,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
-    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrModeratorOrMe,)
+    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly
+                          | IsModeratorOrReadOnly | IsAuthorOrReadOnly)
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')
@@ -165,6 +168,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(
             review=get_object_or_404(
-                Review, pk=self.kwargs['review_id'],),
+                Review, pk=self.kwargs['review_id'], ),
             author=self.request.user,
         )
