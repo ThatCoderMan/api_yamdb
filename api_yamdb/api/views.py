@@ -119,7 +119,8 @@ class GenreViewSet(CreateListDestroyModelViewSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.annotate(rating=Avg('review__score'))
+    queryset = Title.objects.select_related('category').prefetch_related(
+        'genre').annotate(rating=Avg('review__score'))
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
@@ -138,7 +139,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
                           | IsModeratorOrReadOnly | IsAuthorOrReadOnly)
 
     def get_queryset(self):
-        title_id = self.kwargs.get('title_id')
+        title_id = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
         return Review.objects.filter(title=title_id)
 
     def perform_create(self, serializer):
@@ -162,7 +163,7 @@ class CommentViewSet(viewsets.ModelViewSet):
                           | IsModeratorOrReadOnly | IsAuthorOrReadOnly)
 
     def get_queryset(self):
-        review_id = self.kwargs.get('review_id')
+        review_id = get_object_or_404(Review, pk=self.kwargs.get('review_id'))
         return Comment.objects.filter(review=review_id)
 
     def perform_create(self, serializer):
