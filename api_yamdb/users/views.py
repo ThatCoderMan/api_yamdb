@@ -10,10 +10,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from reviews.models import User
+from users.models import User
 
-from .auth_srialisers import SignUpSerializer, TokenSerializer, UserSerializer
 from .permissions import IsAdmin
+from .serializers import SignUpSerializer, TokenSerializer, UserSerializer
 
 
 def send_email_confirmation(user, confirmation_code):
