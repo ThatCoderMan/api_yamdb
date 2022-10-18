@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 from reviews.models import Comment, Review, Title
 
 from .permissions import (IsAdminOrReadOnly, IsAuthorOrReadOnly,
@@ -10,7 +11,6 @@ from .review_serializers import CommentSerializer, ReviewSerializer
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly
                           | IsModeratorOrReadOnly | IsAuthorOrReadOnly)
 
@@ -34,7 +34,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly
                           | IsModeratorOrReadOnly | IsAuthorOrReadOnly)
 

@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
                                    ListModelMixin)
+
 from reviews.models import Category, Genre, Title
 
 from .filters import TitleFilter
@@ -40,7 +41,6 @@ class GenreViewSet(CreateListDestroyModelViewSet):
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.select_related('category').prefetch_related(
         'genre').annotate(rating=Avg('review__score'))
-    http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
