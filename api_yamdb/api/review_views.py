@@ -5,7 +5,7 @@ from reviews.models import Comment, Review, Title
 
 from .permissions import (IsAdminOrReadOnly, IsAuthorOrReadOnly,
                           IsModeratorOrReadOnly)
-from .serializers import CommentSerializer, ReviewSerializer
+from .review_serializers import CommentSerializer, ReviewSerializer
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
