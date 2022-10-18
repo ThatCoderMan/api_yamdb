@@ -61,9 +61,9 @@ class User(AbstractUser):
         return self.role == 'moderator'
 
     def save(self, *args, **kwargs):
-        if self.role == 'admin' or self.is_superuser:
+        if self.is_admin or self.is_superuser:
             self.is_staff = True
-        elif self.role in ('user', 'moderator') or not self.is_superuser:
+        else:
             self.is_staff = False
         super(User, self).save(*args, **kwargs)
 
