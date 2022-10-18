@@ -63,8 +63,6 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         if self.is_admin or self.is_superuser:
             self.is_staff = True
-        else:
-            self.is_staff = False
         super(User, self).save(*args, **kwargs)
 
     def __str__(self):
