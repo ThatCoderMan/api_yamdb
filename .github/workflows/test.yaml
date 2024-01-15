@@ -12,7 +12,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: db
+          POSTGRES_DB: postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         options: >-
