@@ -1,11 +1,8 @@
 name: workflows
 on:
   pull_request:
-    branches:
-      - master
     types:
       - opened
-
 jobs:
   tests:
     runs-on: ubuntu-latest
