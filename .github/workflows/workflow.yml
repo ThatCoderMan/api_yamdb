@@ -1,5 +1,10 @@
 name: workflows
-on: [push]
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
 
 jobs:
   tests:
