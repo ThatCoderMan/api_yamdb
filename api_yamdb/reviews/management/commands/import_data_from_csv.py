@@ -2,7 +2,6 @@ from csv import DictReader
 from sys import exit
 
 from django.core.management import BaseCommand
-
 from reviews.models import Category, Comment, Genre, Review, Title, User
 
 CSV_TABLES = {
@@ -25,9 +24,11 @@ def delete_everything():
 
 
 def print_attention():
-    print('Внимание! Будут уничтожены данные обо всех '
-          'категориях, жанрах, произведениях, обзорах и комментариях '
-          'и заменены данными из CSV-файлов. Хотите продолжить ? [Y / N]: ')
+    print(
+        'Внимание! Будут уничтожены данные обо всех '
+        'категориях, жанрах, произведениях, обзорах и комментариях '
+        'и заменены данными из CSV-файлов. Хотите продолжить ? [Y / N]: '
+    )
     answer = input()
     if answer.upper() != 'Y':
         exit()
@@ -38,7 +39,6 @@ delete_everything()
 
 
 class Command(BaseCommand):
-
     def handle(self, *args, **options):
         for value in CSV_TABLES['User']:
             User.objects.get_or_create(
@@ -48,36 +48,19 @@ class Command(BaseCommand):
                 role=value['role'],
                 bio=value['bio'],
                 first_name=value['first_name'],
-                last_name=value['last_name']
+                last_name=value['last_name'],
             )
         for value in CSV_TABLES['Category']:
-            Category.objects.get_or_create(
-                pk=value['id'],
-                name=value['name'],
-                slug=value['slug']
-            )
+            Category.objects.get_or_create(pk=value['id'], name=value['name'], slug=value['slug'])
         for value in CSV_TABLES['Genre']:
-            Genre.objects.get_or_create(
-                pk=value['id'],
-                name=value['name'],
-                slug=value['slug']
-            )
+            Genre.objects.get_or_create(pk=value['id'], name=value['name'], slug=value['slug'])
         for value in CSV_TABLES['Title']:
             category = Category.objects.get(pk=value['category'])
-            Title.objects.get_or_create(
-                pk=value['id'],
-                name=value['name'],
-                year=value['year'],
-                category=category
-            )
+            Title.objects.get_or_create(pk=value['id'], name=value['name'], year=value['year'], category=category)
         for value in CSV_TABLES['GenreTitle']:
             title = Title.objects.get(pk=value['title_id'])
             genre = Genre.objects.get(pk=value['genre_id'])
-            Title.genre.through.objects.get_or_create(
-                pk=value['id'],
-                title=title,
-                genre=genre
-            )
+            Title.genre.through.objects.get_or_create(pk=value['id'], title=title, genre=genre)
         for value in CSV_TABLES['Review']:
             title = Title.objects.get(pk=value['title_id'])
             author = User.objects.get(pk=value['author'])

@@ -2,7 +2,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
-
 from reviews.models import Category, Comment, Genre, Review, Title
 
 
@@ -26,25 +25,16 @@ class TitleGetSerializer(serializers.ModelSerializer):
     rating = serializers.IntegerField(read_only=True)
 
     class Meta:
-        fields = ('id', 'name', 'year', 'description',
-                  'rating', 'genre', 'category')
+        fields = ('id', 'name', 'year', 'description', 'rating', 'genre', 'category')
         model = Title
 
 
 class TitleEditSerializer(serializers.ModelSerializer):
-    category = serializers.SlugRelatedField(
-        queryset=Category.objects.all(),
-        slug_field='slug'
-    )
-    genre = serializers.SlugRelatedField(
-        queryset=Genre.objects.all(),
-        slug_field='slug',
-        many=True
-    )
+    category = serializers.SlugRelatedField(queryset=Category.objects.all(), slug_field='slug')
+    genre = serializers.SlugRelatedField(queryset=Genre.objects.all(), slug_field='slug', many=True)
 
     class Meta:
-        fields = ('id', 'name', 'year',
-                  'description', 'genre', 'category')
+        fields = ('id', 'name', 'year', 'description', 'genre', 'category')
         model = Title
 
 
@@ -60,8 +50,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         method = self.context['request'].method
         title = get_object_or_404(Title, pk=title_id)
-        if (method == 'POST'
-                and Review.objects.filter(title=title, author=user).exists()):
+        if method == 'POST' and Review.objects.filter(title=title, author=user).exists():
             raise ValidationError()
         return attrs
 
