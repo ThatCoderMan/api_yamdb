@@ -1,27 +1,23 @@
-name: workflows
+name: pre-commit
+
 on:
-  pull_request:
-    types:
-      - opened
+ pull_request:
+   types: [opened, synchronize, reopened]
 
 jobs:
-  tests:
-    runs-on: ubuntu-latest
+ pre-commit:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout
+       uses: actions/checkout@v3
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.7
+     - name: Setup Python
+       uses: actions/setup-python@v2
+       with:
+         python-version: "3.11"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
-        pip install -r api_yamdb/requirements.txt
-    - name: Test with flake8 and django tests
-      run: |
-        pytest
-        cd api_yamdb
-        python -m flake8
+     - name: Install pre-commit
+       run: pip install pre-commit
+
+     - name: Run pre-commit
+       run: pre-commit run --all-files
