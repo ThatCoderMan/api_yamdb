@@ -6,11 +6,9 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
@@ -42,7 +40,15 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('text', models.TextField()),
-                ('score', models.IntegerField(validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(10)])),
+                (
+                    'score',
+                    models.IntegerField(
+                        validators=[
+                            django.core.validators.MinValueValidator(1),
+                            django.core.validators.MaxValueValidator(10),
+                        ]
+                    ),
+                ),
                 ('pub_date', models.DateTimeField(auto_now_add=True, db_index=True)),
             ],
         ),
@@ -51,9 +57,25 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
-                ('year', models.IntegerField(validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(2022)])),
+                (
+                    'year',
+                    models.IntegerField(
+                        validators=[
+                            django.core.validators.MinValueValidator(0),
+                            django.core.validators.MaxValueValidator(2022),
+                        ]
+                    ),
+                ),
                 ('description', models.TextField(blank=True, null=True)),
-                ('category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='title', to='reviews.Category')),
+                (
+                    'category',
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name='title',
+                        to='reviews.Category',
+                    ),
+                ),
                 ('genre', models.ManyToManyField(related_name='title', to='reviews.Genre')),
             ],
         ),

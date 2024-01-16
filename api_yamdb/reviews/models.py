@@ -27,69 +27,40 @@ class Genre(models.Model):
 
 class Title(models.Model):
     name = models.CharField(max_length=100)
-    year = models.IntegerField(
-        validators=[MinValueValidator(0),
-                    MaxValueValidator(get_current_year())]
-    )
+    year = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(get_current_year())])
     description = models.TextField(blank=True, null=True)
     genre = models.ManyToManyField(Genre, related_name='title')
-    category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL,
-        related_name='title', null=True
-    )
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='title', null=True)
 
     def __str__(self):
         return self.name
 
 
 class Review(models.Model):
-    title = models.ForeignKey(
-        Title, on_delete=models.CASCADE,
-        related_name='review'
-    )
+    title = models.ForeignKey(Title, on_delete=models.CASCADE, related_name='review')
     text = models.TextField()
-    score = models.IntegerField(
-        validators=[MinValueValidator(1),
-                    MaxValueValidator(10)]
-    )
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE,
-        related_name='review'
-    )
+    score = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review')
     pub_date = models.DateTimeField(
         auto_now_add=True,
         db_index=True,
     )
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['title', 'author'],
-                name='unique_title_author'
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=['title', 'author'], name='unique_title_author')]
 
     def __str__(self):
-        return (f'Обзор пользователя {self.author.username} '
-                f'на произведение "{self.title}"')
+        return f'Обзор пользователя {self.author.username} ' f'на произведение "{self.title}"'
 
 
 class Comment(models.Model):
-    review = models.ForeignKey(
-        Review, on_delete=models.CASCADE,
-        related_name='comment'
-    )
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comment')
     text = models.TextField()
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE,
-        related_name='comment'
-    )
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment')
     pub_date = models.DateTimeField(
         auto_now_add=True,
         db_index=True,
     )
 
     def __str__(self):
-        return ('Комментарий к обзору пользователя '
-                f'{self.review.author.username} на '
-                f'"{self.review.title}"')
+        return 'Комментарий к обзору пользователя ' f'{self.review.author.username} на ' f'"{self.review.title}"'

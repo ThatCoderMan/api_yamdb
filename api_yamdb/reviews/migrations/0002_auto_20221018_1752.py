@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -18,22 +17,30 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='review',
             name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='review', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, related_name='review', to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
             model_name='review',
             name='title',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='review', to='reviews.Title'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, related_name='review', to='reviews.Title'
+            ),
         ),
         migrations.AddField(
             model_name='comment',
             name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comment', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, related_name='comment', to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
             model_name='comment',
             name='review',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comment', to='reviews.Review'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, related_name='comment', to='reviews.Review'
+            ),
         ),
         migrations.AddConstraint(
             model_name='review',
