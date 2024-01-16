@@ -2,7 +2,6 @@ from csv import DictReader
 from sys import exit
 
 from django.core.management import BaseCommand
-
 from reviews.models import Category, Comment, Genre, Review, Title, User
 
 CSV_TABLES = {

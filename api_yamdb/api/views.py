@@ -3,18 +3,20 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin)
+from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, ListModelMixin
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-
 from reviews.models import Category, Comment, Genre, Review, Title
 
 from .filters import TitleFilter
-from .permissions import (IsAdminOrReadOnly, IsAuthorOrReadOnly,
-                          IsModeratorOrReadOnly)
-from .serializers import (CategorySerializer, CommentSerializer,
-                          GenreSerializer, ReviewSerializer,
-                          TitleEditSerializer, TitleGetSerializer)
+from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly, IsModeratorOrReadOnly
+from .serializers import (
+    CategorySerializer,
+    CommentSerializer,
+    GenreSerializer,
+    ReviewSerializer,
+    TitleEditSerializer,
+    TitleGetSerializer,
+)
 
 
 class CreateListDestroyModelViewSet(CreateModelMixin,
